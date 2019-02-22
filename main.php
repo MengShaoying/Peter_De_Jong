@@ -1,4 +1,21 @@
 <?php
+/**
+ * Peter De Jong Attractor
+ *
+ * @author MengShaoying <mengshaoying@aliyun.com>
+ */
+
+/**
+ * Get next point of Peter De Jong attractor
+ *
+ * @param float $x
+ * @param float $y
+ * @param float $a
+ * @param float $b
+ * @param float $c
+ * @param float $d
+ * @return array
+ */
 function getNextPoint($x, $y, $a, $b, $c, $d)
 {
     $xNext = sin($a * $y) - cos($b * $x);
@@ -6,12 +23,23 @@ function getNextPoint($x, $y, $a, $b, $c, $d)
     return [$xNext, $yNext];
 }
 
+/**
+ * Create and save a image use GD
+ */
 class Image
 {
+    /** @var string file location */
     private $path;
+    /** @var resource a GD resource */
     private $gd;
+    /** @var int color */
     private $color;
 
+    /**
+     * Create a Image instance
+     *
+     * @param string $path
+     */
     public function __construct($path)
     {
         $this->gd = imagecreate(4000, 4000);
@@ -20,11 +48,20 @@ class Image
         $this->path = $path;
     }
 
+    /**
+     * draw a point
+     *
+     * @param float $x
+     * @param float $y
+     */
     public function draw($x, $y)
     {
         imagesetpixel($this->gd, intval(1000 * $x + 2000), intval(1000 * $y + 2000), $this->color);
     }
 
+    /**
+     * save image
+     */
     public function save()
     {
         imagepng($this->gd, $this->path);
