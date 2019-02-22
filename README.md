@@ -1,5 +1,7 @@
 # Peter De Jong Attractor
 
+![](./10_example.png)
+
 Peter De Jong:
 
     x[n+1] = sin(a * y[n]) - cos(b * x[n])

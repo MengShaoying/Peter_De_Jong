@@ -40,7 +40,7 @@ $d = mt_rand() / mt_getrandmax() * 6 - 3;
 
 $image = new Image('Peter_De_Jong.png');
 $data = [$x, $y];
-for ($i = 1; $i < 1000000; $i++) {
+for ($i = 1; $i < 2000000; $i++) {
     list($x, $y) = $data;
     $image->draw($x, $y);
     $data = getNextPoint($x, $y, $a, $b, $c, $d);
