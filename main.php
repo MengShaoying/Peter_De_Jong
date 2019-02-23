@@ -6,6 +6,44 @@
  */
 
 /**
+ *
+ */
+function toRGB($val)
+{
+    $label = $val * 7;
+    if ($label < 1) {
+        $r = intval($label * 256);
+        $g = 0;
+        $b = 0;
+    } elseif ($label < 2) {
+        $r = 255;
+        $g = intval(($label - 1) * 256);
+        $b = 0;
+    } elseif ($label < 3) {
+        $r = 255 - intval(($label - 2) * 256);
+        $g = 255;
+        $b = 0;
+    } elseif ($label < 4) {
+        $r = 0;
+        $g = 255;
+        $b = intval(($label - 3) * 256);
+    } elseif ($label < 5) {
+        $r = 0;
+        $g = 255 - intval(($label - 4) * 256);
+        $b = 255;
+    } elseif ($label < 6) {
+        $r = intval(($label - 5) * 256);
+        $g = 0;
+        $b = 255;
+    } else {
+        $r = 255;
+        $g = intval(($label - 6) * 256);
+        $b = 255;
+    }
+    return [$r, $g, $b];
+}
+
+/**
  * Get next point of Peter De Jong attractor
  *
  * @param float $x
@@ -32,7 +70,7 @@ function getNextPoint($x, $y, $a, $b, $c, $d)
 class Image
 {
     /** @var int image size */
-    const SIZE = 400;
+    const SIZE = 1400;
     /** @var string file location */
     private $path;
     /** @var resource a GD resource */
@@ -74,8 +112,8 @@ class Image
         $yIndex = intval(($y + 2) / 4 * self::SIZE);
         $yIndex = $yIndex < 0 ? 0 : ($yIndex >= self::SIZE ? self::SIZE - 1 : $yIndex);
         $this->matrix[$yIndex][$xIndex]++;
-        if (log($this->matrix[$yIndex][$xIndex], 2) > $this->max) {
-            $this->max = log($this->matrix[$yIndex][$xIndex], 2);
+        if (log($this->matrix[$yIndex][$xIndex], M_E) > $this->max) {
+            $this->max = log($this->matrix[$yIndex][$xIndex], M_E);
         }
     }
 
@@ -86,8 +124,8 @@ class Image
     {
         for ($i = 0; $i < self::SIZE; $i++) {
             for ($j = 0; $j < self::SIZE; $j++) {
-                $color = intval(log($this->matrix[$i][$j], 2) * 255 / $this->max);
-                $color = imagecolorallocate($this->gd, $color, $color, $color);
+                list($r, $g, $b) = toRGB(log($this->matrix[$i][$j], M_E) / $this->max);
+                $color = imagecolorallocate($this->gd, $r, $g, $b);
                 imagesetpixel($this->gd, $j, $i, $color);
                 imagecolordeallocate($this->gd, $color);
             }
@@ -110,7 +148,7 @@ while (file_exists("Peter_De_Jong_$fileNameId.png")) {
 
 $image = new Image("Peter_De_Jong_$fileNameId.png");
 $data = [$x, $y];
-for ($i = 1; $i < 100000; $i++) {
+for ($i = 1; $i < 2000000; $i++) {
     list($x, $y) = $data;
     $image->draw($x, $y);
     $data = getNextPoint($x, $y, $a, $b, $c, $d);
