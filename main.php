@@ -70,7 +70,7 @@ function getNextPoint($x, $y, $a, $b, $c, $d)
 class Image
 {
     /** @var int image size */
-    const SIZE = 1400;
+    const SIZE = 512;
     /** @var string file location */
     private $path;
     /** @var resource a GD resource */
