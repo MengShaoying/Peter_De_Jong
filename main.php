@@ -5,6 +5,13 @@
  * @author MengShaoying <mengshaoying@aliyun.com>
  */
 
+function toBW($val)
+{
+    $color = intval(255 * $val);
+    $color = $color < 0 ? 0 : $color;
+    return [$color, $color, $color];
+}
+
 /**
  *
  */
@@ -124,7 +131,7 @@ class Image
     {
         for ($i = 0; $i < self::SIZE; $i++) {
             for ($j = 0; $j < self::SIZE; $j++) {
-                list($r, $g, $b) = toRGB(log($this->matrix[$i][$j], M_E) / $this->max);
+                list($r, $g, $b) = toBW(log($this->matrix[$i][$j], M_E) / $this->max);
                 $color = imagecolorallocate($this->gd, $r, $g, $b);
                 imagesetpixel($this->gd, $j, $i, $color);
                 imagecolordeallocate($this->gd, $color);
